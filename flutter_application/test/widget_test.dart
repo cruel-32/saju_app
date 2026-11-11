@@ -1,30 +1,23 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_application/main.dart';
+import 'package:flutter_application/app/app.dart';
+import 'package:flutter_application/domain/saju.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('홈 화면에 만세력·격·심층 분석이 보인다', (tester) async {
+    await tester.pumpWidget(const BoriumApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('나의 만세력'), findsOneWidget);
+    expect(find.text('편인격'), findsOneWidget);
+    expect(find.text('나의 가능성 심층 분석'), findsOneWidget);
+    expect(find.text('甲'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  test('간지 문자열로 기둥을 만든다', () {
+    final day = Pillar.of('일주', '甲寅', isDay: true);
+    expect(day.stem.ohaeng, Ohaeng.wood);
+    expect(day.branch.hangul, '인');
+    expect(day.hangul, '갑인');
+    expect(() => Pillar.of('일주', '甲'), throwsArgumentError);
   });
 }
