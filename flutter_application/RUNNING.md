@@ -1,5 +1,17 @@
 # 봄(Borium) 앱 실행 방법
 
+## 가장 쉬운 방법: `run.bat`
+
+프로젝트 루트에서 더블클릭하거나 터미널에서:
+
+```bash
+run.bat          # Windows 데스크톱 앱으로 실행 (기본값)
+run.bat chrome   # 웹 브라우저(Chrome)로 실행
+run.bat edge     # 웹 브라우저(Edge)로 실행
+```
+
+`run.bat`은 `C:\flutter\bin\flutter.bat`가 있으면 그걸 우선 사용하고, 없으면 PATH의 `flutter`를 그대로 쓴다. 이 PC처럼 Flutter SDK가 한글 경로에 있어서 생기는 문제(아래 "주의할 점" 참고)를 신경 쓰지 않아도 되고, 다른 PC에 그대로 복사해서 써도 안전하다.
+
 ## 사전 준비
 
 - Flutter SDK 설치 확인: `flutter --version` (현재 환경: Flutter 3.47.9, Dart 3.13.7)
