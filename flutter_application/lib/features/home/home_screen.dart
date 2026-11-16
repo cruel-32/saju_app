@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../app/routes.dart';
 import '../../app/theme.dart';
 import '../../data/sample_chart.dart';
 import '../../domain/saju.dart';
+import '../gyeok/gyeok_screen.dart';
+import '../manse/manse_screen.dart';
 import 'widgets/gyeok_card.dart';
 import 'widgets/pillars_card.dart';
 import 'widgets/premium_section.dart';
@@ -16,18 +19,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const _tabLabels = ['홈', '나의 분석', '만세력', '마이'];
-
   int _tab = 0;
+
+  Widget _body() {
+    switch (_tab) {
+      case 0:
+        return HomeTab(
+          chart: sampleChart,
+          onSelectTab: (i) => setState(() => _tab = i),
+        );
+      case 1:
+        return GyeokScreen(chart: sampleChart, asTab: true);
+      case 2:
+        return ManseScreen(chart: sampleChart, asTab: true);
+      default:
+        return const _MyTab();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _tab == 0
-            ? HomeTab(chart: sampleChart)
-            : _ComingSoon(label: _tabLabels[_tab]),
-      ),
+      body: _tab == 0 || _tab == 3 ? SafeArea(child: _body()) : _body(),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),
@@ -59,14 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
 /// 홈 탭 본문.
 class HomeTab extends StatelessWidget {
-  const HomeTab({super.key, required this.chart});
+  const HomeTab({super.key, required this.chart, this.onSelectTab});
 
   final SajuChart chart;
 
-  void _comingSoon(BuildContext context, String what) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$what 화면은 준비 중입니다')));
+  /// 하단 탭으로 전환합니다 (1: 나의 분석, 2: 만세력).
+  final ValueChanged<int>? onSelectTab;
+
+  void _open(BuildContext context, String route) {
+    Navigator.of(context).pushNamed(route);
   }
 
   @override
@@ -78,22 +92,26 @@ class HomeTab extends StatelessWidget {
         children: [
           _Header(
             name: chart.name,
-            onSwitchProfile: () => _comingSoon(context, '사주 선택'),
+            onSwitchProfile: () => _open(context, Routes.input),
           ),
           const SizedBox(height: 8),
           PillarsCard(
             chart: chart,
-            onTap: () => _comingSoon(context, '나의 만세력'),
+            onTap: () => onSelectTab == null
+                ? _open(context, Routes.manse)
+                : onSelectTab!(2),
           ),
           const SizedBox(height: 14),
           GyeokCard(
             chart: chart,
-            onTap: () => _comingSoon(context, '나의 격'),
+            onTap: () => onSelectTab == null
+                ? _open(context, Routes.gyeok)
+                : onSelectTab!(1),
           ),
           const SizedBox(height: 20),
           PremiumSection(
             currentLuck: chart.currentLuck,
-            onOpen: (title) => _comingSoon(context, title),
+            onOpen: (route) => _open(context, route),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -146,17 +164,26 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _ComingSoon extends StatelessWidget {
-  const _ComingSoon({required this.label});
-
-  final String label;
+/// 마이 탭 (사주 관리로 연결만 해 둔 상태).
+class _MyTab extends StatelessWidget {
+  const _MyTab();
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        '$label 화면은 준비 중입니다',
-        style: const TextStyle(color: AppColors.textMuted),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            '마이 화면은 준비 중입니다',
+            style: TextStyle(color: AppColors.textMuted),
+          ),
+          const SizedBox(height: 12),
+          TextButton(
+            onPressed: () => Navigator.of(context).pushNamed(Routes.input),
+            child: const Text('사주 정보 입력'),
+          ),
+        ],
       ),
     );
   }

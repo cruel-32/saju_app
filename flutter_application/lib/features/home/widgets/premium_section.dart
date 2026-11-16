@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/routes.dart';
 import '../../../app/theme.dart';
 import '../../../widgets/surface_card.dart';
 
@@ -14,14 +15,14 @@ class PremiumSection extends StatelessWidget {
   /// 현재 대운 간지 (예: 甲辰).
   final String currentLuck;
 
-  /// 메뉴 제목을 받아 해당 화면을 엽니다.
+  /// 화면 경로(Routes)를 받아 해당 화면을 엽니다.
   final ValueChanged<String> onOpen;
 
   static const _menus = [
-    (title: '나의 격 심층 분석', sub: '성립 조건 · 용신'),
-    (title: '사회적 역할', sub: '역할 유형 · 환경'),
-    (title: '나의 재능', sub: '사고·기획·표현·실행'),
-    (title: '진로와 직업', sub: '직업군 · 독립/조직'),
+    (title: '나의 격 심층 분석', sub: '성립 조건 · 용신', route: Routes.premium),
+    (title: '사회적 역할', sub: '역할 유형 · 환경', route: Routes.role),
+    (title: '나의 재능', sub: '사고·기획·표현·실행', route: Routes.talent),
+    (title: '진로와 직업', sub: '직업군 · 독립/조직', route: Routes.career),
   ];
 
   @override
@@ -30,7 +31,7 @@ class PremiumSection extends StatelessWidget {
           child: _MenuTile(
             title: _menus[i].title,
             subtitle: _menus[i].sub,
-            onTap: () => onOpen(_menus[i].title),
+            onTap: () => onOpen(_menus[i].route),
           ),
         );
 
@@ -59,7 +60,7 @@ class PremiumSection extends StatelessWidget {
         SurfaceCard(
           radius: 12,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
-          onTap: () => onOpen('대운에 따른 인생의 흐름'),
+          onTap: () => onOpen(Routes.flow),
           child: Row(
             children: [
               const Text(

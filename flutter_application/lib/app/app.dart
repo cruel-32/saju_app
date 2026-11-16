@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../features/home/home_screen.dart';
+import 'routes.dart';
 import 'theme.dart';
 
 class BoriumApp extends StatelessWidget {
@@ -12,7 +12,8 @@ class BoriumApp extends StatelessWidget {
       title: '보리음',
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
-      home: const HomeScreen(),
+      initialRoute: Routes.home,
+      routes: buildRoutes(),
     );
   }
 }
